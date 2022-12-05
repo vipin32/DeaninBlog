@@ -4,7 +4,11 @@ Rails.application.routes.draw do
     sessions: 'users/sessions',
     registrations: 'users/registrations',
   }
-  resources :posts
+
+  resources :posts do
+    resources :comments
+  end
+  
   root "pages#home"
 
   get "about", to: "pages#about"

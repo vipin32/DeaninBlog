@@ -8,3 +8,18 @@
 
   <%= button_to "Destroy this post", @post, method: :delete, class: "btn btn-sm btn-danger" %>
 </div>
+
+<hr/>
+<h6 class="my-4">Reply : </h6>
+
+<div class="my-2 col-sm-6">
+  <%= render "comments/form", post: @post %>
+
+  <h4 class="my-4">Comments (<%= @comments.count %>)</h4>
+
+  <% @comments.each do |comment| %>
+    <%= render "comments/comment", post: @post, comment: comment %>
+  <% end %>
+
+</div>
+
