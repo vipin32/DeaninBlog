@@ -13,7 +13,7 @@
 <h6 class="my-4">Reply : </h6>
 
 <div class="my-2 col-sm-6">
-  <%= render "comments/form", post: @post %>
+  <%= render "comments/form", post: @post, comment: @post.comments.build %>
 
   <h4 class="my-4">Comments (<%= @comments.count %>)</h4>
 
