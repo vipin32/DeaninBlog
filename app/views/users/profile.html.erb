@@ -1,0 +1,5 @@
+<h1><%= @user.name %></h1>
+
+<h4><%= pluralize(@user.views, 'views') %></h4>
+
+<p><%= pluralize(@user.posts.count, 'Post') %></p>

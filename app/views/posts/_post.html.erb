@@ -1,13 +1,19 @@
 <div id="<%= dom_id post %>">
-  <p>
-    Views : <%= post.views %>
-  </p>
+  
   <h4>
     <%= post.title %>
   </h4>
 
+  <h6>
+  Author : <%= link_to post.user.name, user_profile_path(post.user) %>
+  </h6>
+
   <div>
     <%= post.body %>
   </div>
+
+  <p>
+    <%= pluralize(post.views, 'View') %>
+  </p>
 
 </div>
