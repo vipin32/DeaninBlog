@@ -368,10 +368,8 @@ http.use_ssl = false
 http.verify_mode = OpenSSL::SSL::VERIFY_NONE
 
 request = Net::HTTP::Get.new(url)
-# req.basic_auth 'user', 'pass'
 
 response = http.request(request)
-# puts response.read_body
 
 render plain: response.body
 
@@ -384,12 +382,39 @@ response = Net::HTTP.post_form(uri, 'email' => 'vipin233@gmail.com', 'password' 
 render plain: response.body
 
 Method 5
-
 Curl register to remote/external application with post data
+
+******************************************************
+
 
 uri = URI('http://localhost/api-setup/public/api/register')
 response = Net::HTTP.post_form(uri, 'name'=>'Jack', 'email' => 'jack@gmail.com', 'password' => '123456', 'password_confirmation'=>'123456')
 render plain: response.body
+
+******************************************************
+
+
+Method 6
+Curl API with bearer token authentication
+
+******************************************************
+
+url = URI("http://localhost/api-setup/public/api/ceo")
+
+http = Net::HTTP.new(url.host, url.port)
+http.use_ssl = false
+http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+
+request = Net::HTTP::Get.new(url)
+
+request["Authorization"] = "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiOTgyMzdlYzg4MzlhZTMwNzhhYjJhMTdmZDNkNDhlOTgzMWFhMjRmZmQxNDhkNDZkMGIxYjA5YmYzY2Y0NGVhNWRkYzljZjcyNmEzMjlkOGIiLCJpYXQiOjE2NzA1ODA0OTEuMTEyMDE0LCJuYmYiOjE2NzA1ODA0OTEuMTEyMDI0LCJleHAiOjE3MDIxMTY0OTAuNzUyMDI5LCJzdWIiOiIzIiwic2NvcGVzIjpbXX0.0JaNRXRBkhFqHydiLapFmd4TmbYxTZevnH4tAn6n7O5Xnn2VMEIMxLadmAUyNHpVUqWZBirEDw-pqRfoVSYcgzW2Io4i3X_ZHzMMfQKSXx3GIEmvqOSL-piEcUbpBR1AYxk4IyzZwqDYJVrZLtJ7Slav7dWSIpVBUzPfzZ_5MjoeEq6r-2GVy--oos1rxKg0Frw0zNc-A8kq9kecOOmFSfr81LmK6aYq_EEMkaTMUIkM0qeEIaW-GvvpTpLzxFGyk0FQQJOW9mYHd_5VvI4QeftM9fUnsrJgjrnyK103WTUSP0hdqi4MTD5wQng5kuEIr-cCUHnsDKmTmHWm5ihsXibKDIegdM6mM3xbKyzfNH5fgBlNHKw8xEf8xQK6BY6KyyybgtGmnlbZ5f4UWgjDT6_qTAlGTKdwhOb67KKbaL7IAYBsTibU7yb78KCZLReMMgub2f28z009BvRdq7wbcwW6hsoum7ApgDlX9G9ty_FH43AhdEHprezZYyacstIne5JzyHHT7wDBmoAzIRpSQqYBwkbiTTrZUDjUbamDqCr1Mdn6rKOpjp97FrtGmqZz-DN_UQTBvAFTSO-qP-zRHgn3VryeHg5_Qo-ETEDGeKRNxs1nHijSkeAdtOc0WGGFEh2zgAGwECycc5f6WNhWxu5gatTIWyt9lBkT02ykAP4"
+
+response = http.request(request)
+
+render plain: response.body
+
+
+******************************************************
 
 Errors in CURL :
 
