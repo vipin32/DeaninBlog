@@ -1,0 +1,417 @@
+Debug any variable in rails
+
+	@hosts = search.includes(included_associations).paginate(:page => params[:page], :per_page => params[:per_page])
+
+	render json: @hosts
+	return
+
+	or
+
+	render plain: "OK"
+	render plain: @hosts
+
+	render plain: params[:article].inspect
+	return
+
+	@host_data = Host.all
+	render @host_data.inspect
+
+	<%= debug(variable_name) %>
+	<%= debug(user.name) %>
+
+Print Submitted Form Data
+render plain: params[:user] 
+
+Foreman file path : cd /usr/share/foreman
+
+Error Messages not displaying and not updating html
+	This is due to turbo enabled on form
+
+	To disable it update form tag by adding this atrribute :
+	data: { turbo: false } 
+
+	Ex : <%= form_with model: @user, url:sign_up_path, data: { turbo: false } do |form| %>
+		 
+		 <% end %
+	
+	https://stackoverflow.com/questions/70400958/error-form-responses-must-redirect-to-another-location
+
+0. Restart foreman
+	systemctl restart foreman
+
+1. Display all foreman routes
+	foreman-rake routes
+	
+2. Display routes of specific modules
+	foreman-rake routes | grep compute_resources
+
+3. Dispaly Changes in Foreman Docs (10.10.37.170/api/apidoc)
+	foreman-rake apipie:cache
+
+
+Example for changing compute resource api
+
+Task : Lets add machine types api for GCE
+
+1. Add routes to routes file for machine types 
+	(File: foreman\config\routes\api\v2.rb): Add this line 
+	get :available_machines_types, :on => :member
+
+	Now go api controller path and open : app\controllers\api\v2\compute_resources_controller.rb
+
+	i) In code :	before_action :find_resource   
+		add :	available_machines_types
+		
+	ii) Now add function for machine types
+	
+		api :GET, "/compute_resources/:id/available_machines_types", N_("List available machines for a compute resource")
+	  
+		param :id, :identifier, :required => true
+		def available_machines_types
+
+			@available_machines_types = @compute_resource.available_machines_types
+			@total = @available_machines_types&.size
+
+
+			# @machine = 'Machines By Vipin'
+			# render plain: @available_machines_types
+			# return
+
+			render :available_machines_types, :layout => 'api/v2/layouts/index_layout'
+		end
+	iii) add 'machine types' to action_permission inside when 
+			when 'available_machine types'
+	  
+	  
+	  
+
+2. Models Path : foreman\app\models\compute_resource.rb
+
+	Now add this code and update alias_method
+	
+	i) def machine_types
+		 client.list_machine_types(zone).items
+	   end
+	   
+	   alias_method :available_machine, :machine_types
+	   
+3. Now go to permission file (foreman\app\registries\foreman\access_permissions.rb) 
+
+	and add :available_machines_types to map.permission :view_compute_resources
+
+4. Now create one file named available_machines_types.rabl for viewing json
+	Path : foreman\app\views\api\v2\compute_resources\available_machines_types.rabl
+
+5. Login to postgres : 
+	psql -h localhost -d foreman -U foreman
+
+	For db details go to : config/database.yml
+	
+
+
+Sources :
+
+AZURE Files
+
+/opt/theforeman/tfm/root/usr/share/gems/gems/foreman_azure_rm-2.1.2/app/views/compute_resources_vms/form/azurerm
+
+/opt/theforeman/tfm/root/usr/share/gems/gems/foreman_azure_rm-2.1.2/app/views/compute_resources_vms/form/azurerm/_base.html.erb (Duration: 2752.4ms | Allocations: 105609)
+
+
+GCE 
+
+Machine Type
+/usr/share/foreman/app/views/compute_resources_vms/form/gce/_base.html.erb
+
+JS
+C:\Users\deepak\Desktop\foreman\foreman\app\helpers\hosts_helper.rb
+
+Apipie
+https://www.youtube.com/watch?v=fkACBI0fcRI
+
+Active serializers to generate json for rails api
+https://www.youtube.com/channel/UCNyKT62Rczocajwku3uPWbQ
+
+
+Source :
+https://www.youtube.com/channel/UCNyKT62Rczocajwku3uPWbQ
+
+Web Scrapping 
+https://www.youtube.com/watch?v=NwmlUXZahmk
+
+
+Model Events
+
+1)
+
+before_create do
+
+    self.name = login.capitalize if name.blank?
+
+	//Read APS/ARS File
+
+	If ARS
+		//Generate Logs
+		Rails.logger.info "rendering 403 because of missing permission yogi45121212"
+
+		//Redirect to Hosts page After Generating Logs
+		
+		format.html { redirect_to @post, notice: "Post was successfully created." }
+
+	
+end
+
+2) app/services/foreman/env_settings_loader.rb
+	FOREMAN_LOGGING_PRODUCTION_TYPE
+	FOREMAN_LOGGING_PRODUCTION_LAYOUT
+
+
+3) foreman\config\logging.yaml
+
+4) foreman\config\environments\production.rb
+
+5) if File.exist?(File.expand_path('../Gemfile.in', __dir__)) else end
+
+6) Print Rails root path in blade : 
+	<%=  Rails.root %>  
+	Output : /usr/share/foreman
+
+7) Rails ENV : Rails.env 
+	Output : production
+
+8) Rails ENV File : foreman\config\webpack.config.js
+
+9) Generate Logs in Rails : 
+
+  <%=  Rails.logger.info "rendering 403 because of missing permission yogi45121212" %>
+
+  <%= Foreman::Logging.logger('app').info "yogi45121212 thss sadas dadsa" %>
+
+	Output : true
+
+	Now goto /var/log/foreman/production.log
+
+
+
+1) Logging basics In Rails
+
+	Rails Documentation
+		You can specify an alternative logger in config/application.rb or any other environment file, for example:
+
+		config.logger = Logger.new(STDOUT)
+		config.logger = Log4r::Logger.new("Application Log")
+
+		Or in the Initializer section, add any of the following
+
+		Rails.logger = Logger.new(STDOUT)
+		Rails.logger = Log4r::Logger.new("Application Log")
+
+	Foreman Configuration in config/application.rb
+
+		config.logger = Foreman::Logging.logger('app')
+		# Explicitly set the log_level from our config, overriding the Rails env default
+		config.log_level = Foreman::Logging.logger_level('app').to_sym
+		config.active_record.logger = Foreman::Logging.logger('sql')
+
+Host Model File:
+	foreman\app\models\host\managed.rb
+Power Status File
+	foreman\app\models\concerns\hostext\power_interface.rb
+
+
+2) Read a File in Ruby
+
+data = File.read("test.txt").downcase
+# my_string.include? "cde"
+
+
+if data.include? "1"
+	redirect_to root_path, notice: "ARS Sign up succerrrssfull!"
+end
+
+
+3)
+ENV Variables
+
+You can find a list of ALL your environment variables with the env command in Linux
+You can also print all the gem-specific variables & configuration with the gem env command.
+
+4)
+Check Rails environment in rails
+
+bin/rails r 'p Rails.env'
+development
+
+Log before json generation
+Rails.logger.info "CDM in production mode"
+
+5)
+Open console on blade file
+add console in controller to the corressponding blade file
+
+Eg : public function test(){
+	console
+	
+	//code below
+}
+
+6) Display error like Laravel
+
+	i)  Go to gem file and add : 
+		gem 'binding_of_collar'
+		gem 'better_errors'
+	ii) run bundle update
+
+7) Cancel Save on validation
+
+	To prevent record from being saved, you should simply return false:
+
+	def check_for_similar_record
+	if ProductsColor.exists?(color_id: self.color_id, product_id: self.product_id)
+		# merge values
+		false
+	else
+		true
+	end
+	end
+
+
+8) Get Previous url
+	Method1 : <%= request.referrer %>
+	Method1 : <%= url_for(:back) %>
+
+
+Curl Request 
+
+https://jhawthorn.github.io/curl-to-ruby/
+https://github.com/jhawthorn/curl-to-ruby
+
+
+Curl  : 
+
+1) https://www.youtube.com/watch?v=6gfiaxN4K8M&ab_channel=CodeWithHassan
+
+
+2) https://stackoverflow.com/questions/15804425/curl-on-ruby-on-rails
+
+
+3) https://stackoverflow.com/questions/11269224/ruby-https-post-with-headers?noredirect=1&lq=1
+
+
+4) https://stackoverflow.com/questions/22193616/rails-read-the-contents-from-another-site?noredirect=1&lq=1
+
+
+5) https://stackoverflow.com/questions/3810650/help-me-converting-this-curl-to-a-post-method-in-rails?noredirect=1&lq=1
+
+6) https://lostisland.github.io/faraday/usage/
+
+
+Free Api for curl
+1) https://apipheny.io/free-api/     (Without key)
+2) https://rapidapi.com/hub			 (With Key)
+
+Curl In ruby
+
+Before hitting curl request in ruby, please run below Commands if you face certificate expired issue
+
+1) yum update ca-certificates
+
+Method 1
+
+Now test below example
+For Eg : 
+
+/************* Get Api *************************/
+
+require 'net/http'
+require 'uri'
+
+class MainController < ApplicationController
+
+    def index
+
+        uri = URI.parse("https://catfact.ninja/fact")
+        response = Net::HTTP.get_response(uri)
+        render plain: response.body
+        # flash.now[:notice] = "Notice messages"
+        # flash.now[:alert] = "Alert messages"
+    end
+end
+
+/************* Get Api *************************/
+
+
+Method 2
+
+url = URI("https://movie-database-alternative.p.rapidapi.com/?s=Avengers%20Endgame&r=json&page=1")
+
+http = Net::HTTP.new(url.host, url.port)
+http.use_ssl = true
+http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+
+request = Net::HTTP::Get.new(url)
+request["X-RapidAPI-Key"] = '732d8aa05msha2c050ffe8ed96bp1fff4djsne54b5027b0a3'
+request["X-RapidAPI-Host"] = 'movie-database-alternative.p.rapidapi.com'
+
+response = http.request(request)
+puts response.read_body
+
+render plain: response.read_body
+
+
+Method 3
+
+url = URI("http://localhost/api-setup/public/api/ceo")
+
+http = Net::HTTP.new(url.host, url.port)
+http.use_ssl = false
+http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+
+request = Net::HTTP::Get.new(url)
+# req.basic_auth 'user', 'pass'
+
+response = http.request(request)
+# puts response.read_body
+
+render plain: response.body
+
+Method 4
+
+Curl Login to external APP With Post data
+
+uri = URI('http://localhost/api-setup/public/api/login')
+response = Net::HTTP.post_form(uri, 'email' => 'vipin233@gmail.com', 'password' => '123456')
+render plain: response.body
+
+Method 5
+
+Curl register to remote/external application with post data
+
+uri = URI('http://localhost/api-setup/public/api/register')
+response = Net::HTTP.post_form(uri, 'name'=>'Jack', 'email' => 'jack@gmail.com', 'password' => '123456', 'password_confirmation'=>'123456')
+render plain: response.body
+
+Errors in CURL :
+
+
+
+Linux Commands : 
+
+1. Search file with file name
+	find / -name job_invocations
+
+File Paths : 
+
+Job Invocations Path : /opt/theforeman/tfm/root/usr/share/gems/gems/foreman_remote_execution-3.3.7/app/views/job_invocations
+
+
+
+Get organizations with all associated hosts
+
+<%= Organization.find_by(:id  => 1).first.hosts.count %>
+<%= Organization.where(id: 5).first.hosts.count %>
+
+Error in Model
+ def deny_access
+    (User.current.logged? || request.xhr?) ? render_403 : require_login
+  end
