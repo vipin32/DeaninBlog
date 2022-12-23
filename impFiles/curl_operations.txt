@@ -316,6 +316,10 @@ Before hitting curl request in ruby, please run below Commands if you face certi
 
 1) yum update ca-certificates
 
+Converter Raw Curl to Ruby 
+1) https://jhawthorn.github.io/curl-to-ruby/#:~:text=Instantly%20convert%20curl%20commands%20to%20Ruby's%20net%2Fhttp&text=This%20tool%20turns%20a%20curl,bugs%3B%20please%20contribute%20on%20GitHub.
+
+
 Method 1
 
 Now test below example
@@ -360,6 +364,8 @@ render plain: response.read_body
 
 
 Method 3
+
+Curl Request to external API with SSL
 
 url = URI("http://localhost/api-setup/public/api/ceo")
 
