@@ -1,0 +1,109 @@
+1. Install Ruby
+2. gem install rails
+3. rails new blog
+4. cd blog
+5. rails g controller posts
+6. rails g model Post title:string content:text
+7. rails db:migrate
+8. Create Resource Routes 
+    resources :posts
+9. Create scaffolding 
+    rails g scaffold Tweet tweet:text
+
+
+
+Get Curl in console
+1. curl http://localhost:3000/books
+
+Post Curl in console : 
+1. curl --header "Content-Type: application/json" --request POST --data '{"author": "HG Wells", "title": "Time Machine"}' 
+http://localhost:3000/books -v
+
+
+RSpec
+
+1. Add below line to Gem file
+    gem 'rspec-rails' 
+
+2. Run bundle command to install rspec
+3. run 'rspec' in console to run test
+4. Run below command to generate Rspec boilerplate
+    rails generate rspec:install
+
+Run migration in test db
+
+1. rails db:migrate RAILS_ENV=test
+
+Migration Queries 
+
+    1. rails g migration add_user_to_posts user:belongs_to
+    2. Post.destroy_all (Delete all posts)
+
+Update Devise user table
+ Lets Add name column to users table
+
+    1. rails g migration add_name_to_user name
+    2. rails db:migrate
+    3. rails g devise:controllers users
+
+Lets add views column with integer type 
+    rails g migration add_views_to_user views:integer
+
+Lets add default value to a column
+    rails g migration change_views_for_user
+
+    Now go to this migration and below line
+    change_column :users, :views, :integer, default: 0
+
+Update column in console 
+
+    User.all.each do |user|
+        user.views = 0
+        user.save
+    end
+
+
+Comment System in blog
+
+1. rails g model comment post:belongs_to user:belongs_to
+2. rails action_text:install
+3. rails db:migrate
+4. Now in any form use below code to display textarea with text formatter 
+    <%= form.rich_text_area :body %>
+
+For editing any comment using stimulus follow below steps
+
+1.  Create Edit button like below :
+
+    <%= button_to "Edit", nil, remote: true, class: 'btn btn-sm btn-primary mx-1', 
+    data: {
+    controller: "comments",
+    action: "comments#toggleForm",
+    comments_form_param: "edit-form-#{comment.id}",
+    comments_body_param: "comment-body-#{comment.id}"
+    }
+    %>
+2. Now got to app/javascript/controllers and create a file named comments_controller.js
+3. Add Below code
+    toggleForm(event){
+
+        event.preventDefault();
+        event.stopPropagation();
+
+        const formID = event.params["form"];
+        const bodyID = event.params["body"];
+
+        const form = document.getElementById(formID);
+        form.classList.toggle("d-none");
+        form.classList.toggle("mt-5");
+
+        const body = document.getElementById(bodyID);
+        body.classList.toggle("d-none");
+    }
+
+4. Remember there must be a hidden form in comment list with id : edit-form-2
+
+
+Notification in rails using gem noticed
+
+1. Install gem named 'noticed'
