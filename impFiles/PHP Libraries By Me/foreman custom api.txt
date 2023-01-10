@@ -1,0 +1,36 @@
+Foreman is an open-source tool that can be used to manage servers and infrastructure in a consistent and automated way. It provides an API that allows you to interact with the Foreman server and perform various tasks, such as managing hosts, puppet modules, and so on.
+
+To create a custom API in Foreman, you can use the Foreman API plugin. This plugin allows you to add custom actions to the Foreman API, which can be accessed by making HTTP requests to the Foreman server.
+
+Here are the basic steps to create a custom API in Foreman:
+
+Install the Foreman API plugin: You can install the plugin by adding it to your Gemfile and running bundle install.
+
+Create a new controller: Create a new controller that inherits from the Api::V2::BaseController. This controller will contain the actions for your custom API.
+
+Define your custom actions: In the new controller, define the actions that you want to add to the Foreman API. These actions should respond to HTTP requests (GET, POST, etc.) and perform the desired behavior.
+
+Register your controller: Register your new controller with the Foreman API by adding it to the config/routes/api.rb file.
+
+Test your custom API: You can test your custom API by making HTTP requests to the Foreman server and checking the responses.
+
+Here is an example of a simple custom action that returns a list of all hosts managed by Foreman:
+
+Copy code
+class Api::V2::MyController < Api::V2::BaseController
+  def index
+    @hosts = Host.all
+    render :json => @hosts
+  end
+end
+And a route that maps this action to '/api/v2/my' endpoint:
+
+Copy code
+Rails.application.routes.draw do
+  namespace :api, :defaults => {:format => 'json'} do
+    namespace :v2 do
+      resources :my, :only => [:index]
+    end
+  end
+end
+Please note, this is a very simple example, you can include more complex logic or external libraries that can help you with the actions you want to perform. Also, keep in mind that by creating new actions you are also responsible for security validation, this means that you may need to check for user permissions or access controls.

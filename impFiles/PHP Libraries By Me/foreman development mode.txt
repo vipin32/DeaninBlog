@@ -1,0 +1,17 @@
+why I have to restart foreman to see my modifications in any file
+When you make changes to any files in a Foreman application, it is necessary to restart the Foreman server in order for those changes to take effect. This is because Foreman loads the application's code into memory when it starts up, and any changes made to the code while the server is running will not be reflected in the currently loaded version of the code.
+
+Foreman is a Rails application, so it uses the Rails framework, which loads all its code on startup and doesn't reload the code dynamically.
+
+There are a few ways to overcome this.
+
+One is to use the foreman-rake command which enables you to run some of the most commonly used Rails commands such as migrations, routes, and assets:precompile without restarting the foreman server.
+
+Another option is to use a tool like foreman-tricks which can automatically restart the server when certain files change.
+
+A third option is using a development mode like foreman-development which runs the app and auto-reloads the code when any change is detected.
+
+In conclusion, the most common way to see your modifications, is by restarting the Foreman server, but there are some alternatives to avoid it.
+
+
+

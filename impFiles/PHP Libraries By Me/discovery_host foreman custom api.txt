@@ -1,0 +1,47 @@
+You can use the Foreman API to create a custom action that assigns a location to multiple hosts in the discovery host. Here are the general steps you can follow to do this:
+
+Install the Foreman Discovery plugin: The Foreman Discovery plugin provides a set of API endpoints for managing discovery hosts. Make sure you have this plugin installed before proceeding.
+
+Create a new controller: Create a new controller that inherits from Api::V2::BaseController. This controller will contain the actions for your custom API.
+
+Define your custom action: In the new controller, define a new action that will handle the assignment of the location to multiple discovery hosts. This action should accept a list of host IDs and the desired location as parameters, and should perform the necessary update to the database.
+
+Here is an example of a custom action that assigns a location to multiple hosts:
+
+Copy code
+class Api::V2::DiscoveryController < Api::V2::BaseController
+  before_action :find_location, :find_discovery_hosts
+
+  def update_location
+    @discovery_hosts.each do |host|
+      host.update(:location_id => @location.id)
+    end
+    render :json => { :message => 'Location updated successfully' }
+  end
+
+  private
+
+  def find_location
+    @location = Location.find(params[:location_id])
+  end
+
+  def find_discovery_hosts
+    @discovery_hosts = Discovery::Host.where(:id => params[:host_ids])
+  end
+end
+Register the custom route: Register your new controller action with the Foreman API by adding it to the config/routes/api.rb file.
+Copy code
+namespace :api, :defaults => {:format => 'json'} do
+    namespace :v2 do
+      resources :discovery, :only => [] do
+        collection do
+          put :update_location
+        end
+      end
+    end
+end
+Test the custom API: You can test your custom API by sending a PUT request to the endpoint '/api/v2/discovery/update_location' with host_ids and location_id as params, for example with curl command
+Copy code
+curl -X PUT -H 'Content-Type: application/json' -d '{"host_ids":[1,2,3],"location_id":2}' 'http://foreman-host/api/v2/discovery/update_location'
+Please note that this is a simple example and it is just for demonstration purposes, you should add more complex logic or external libraries that can help you with your actions, like error handling, validations, and so on.
+As well as in the previous example, also keep in mind that by creating new actions you are also responsible for security validation, this means that you may need to check for user permissions or access controls.
