@@ -1,3 +1,10 @@
+Get rails environment
+
+rails r "puts Rails.env"
+rails about
+foreman-rake about
+
+
 Debug any variable in rails
 
 	@hosts = search.includes(included_associations).paginate(:page => params[:page], :per_page => params[:per_page])

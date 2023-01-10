@@ -107,3 +107,21 @@ For editing any comment using stimulus follow below steps
 Notification in rails using gem noticed
 
 1. Install gem named 'noticed'
+
+
+
+String Insert and Manipulation
+
+str = current_user.name
+    @user = str.split(" ")
+    @user = @user.insert(1, "CDM")
+    @user = @user.join(" ")
+
+
+    # method 2
+
+    myString = "Admin User"
+
+    myString[" "]= " Ruby "
+
+    puts myString
