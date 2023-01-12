@@ -1,3 +1,110 @@
+<?php
+
+abstract class Shape{
+
+    public $name;
+    function __construct($name)
+    {
+        $this->name = $name;
+    }
+
+    function getName(){
+        return $this->name;
+    }
+
+    abstract public function area() : string;
+    abstract public function perimeter() : string;
+
+}
+
+class Circle extends Shape{
+    public $radius;
+    const PI = 3.14;
+
+    function __construct($radius)
+    {
+        parent::__construct("Circle");
+        $this->radius = $radius;
+    }
+
+    public function area() : string{
+        return $this->radius * $this->radius * self::PI;
+    }
+
+    public function perimeter() : string{
+        return $this->radius * self::PI * 2;
+    }
+
+}
+
+class Rectangle extends Shape{
+    public $length;
+    public $width;
+
+    function __construct($length, $width)
+    {
+        parent::__construct("Rectangle");
+        $this->length = $length;
+        $this->width = $width;
+    }
+
+    public function area() : string{
+        return $this->length * $this->width;
+    }
+
+    public function perimeter() : string{
+        return ($this->length + $this->width)*2;
+    }
+}
+
+class Square extends Rectangle{
+    public $sideLength;
+
+    function __construct($sideLength)
+    {
+        Shape::__construct("Square");
+        $this->sideLength = $sideLength;
+    }
+
+    public function area() : string{
+        return $this->sideLength * $this->sideLength;
+    }
+
+    public function perimeter() : string{
+        return $this->sideLength * 4;
+    }
+}
+
+
+$circle = new circle(1);
+$rectangle = new rectangle(2,3);
+$square = new square(6);
+
+$values = array($circle->area(), $rectangle->area(), $square->area());
+sort($values);
+foreach($values as $val){
+    echo $val;
+    echo "<br>";
+}
+
+// $circle = new circle(3);
+// echo $circle->area();
+// echo "<br>";
+
+// $rectangle = new rectangle(3,4);
+// echo $rectangle->area();
+// echo "<br>";
+// echo $rectangle->perimeter();
+// echo "<br>";
+
+// $square = new square(4);
+// echo $square->area();
+// echo "<br>";
+// echo $square->perimeter();
+// echo "<br>";
+
+
+
 function sortShapesByArea($shapes) {
     usort($shapes, function($a, $b) {
         return $a->area() <=> $b->area();
@@ -20,8 +127,6 @@ $shapes = array(
 $sortedShapes = sortShapesByArea($shapes);
 print_r($sortedShapes);
 
-
-
 Note: This code assumes that the Shape class has a method called "area()" which returns the area of the shape and a variable called "name" which contains the name of the shape.
 The usort function is used for sorting the array of objects, in the foreach loop we extract the name variable from the objects.
 
@@ -35,3 +140,9 @@ So in this case, the function sorts the array of shape objects in ascending orde
 
 In summary, the usort function sorts the array of shapes passed to it by using the area of each shape, and the spaceship operator makes the comparison between the area of two shapes. It sorts the array in ascending order of the area.
 
+
+
+
+
+
+?>
