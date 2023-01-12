@@ -19,3 +19,19 @@ $shapes = array(
 
 $sortedShapes = sortShapesByArea($shapes);
 print_r($sortedShapes);
+
+
+
+Note: This code assumes that the Shape class has a method called "area()" which returns the area of the shape and a variable called "name" which contains the name of the shape.
+The usort function is used for sorting the array of objects, in the foreach loop we extract the name variable from the objects.
+
+
+
+usort is a PHP built-in function that sorts an array of elements by user-defined comparison function. The function takes two arguments: $a and $b, which represent two elements from the array that are being compared.
+
+In this case, the comparison function being passed to usort compares the area of two Shape objects. The <=> operator, also known as the "spaceship operator", is used to determine the order of the elements based on their area. It returns -1 if the area of $a is less than $b, 0 if they are equal, and 1 if the area of $a is greater than $b.
+
+So in this case, the function sorts the array of shape objects in ascending order of their area. This means that the shape with the smallest area will be at the beginning of the array, and the shape with the largest area will be at the end of the array.
+
+In summary, the usort function sorts the array of shapes passed to it by using the area of each shape, and the spaceship operator makes the comparison between the area of two shapes. It sorts the array in ascending order of the area.
+
