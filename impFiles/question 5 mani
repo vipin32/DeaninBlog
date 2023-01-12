@@ -1,0 +1,21 @@
+function sortShapesByArea($shapes) {
+    usort($shapes, function($a, $b) {
+        return $a->area() <=> $b->area();
+    });
+    $names = array();
+    foreach($shapes as $shape) {
+        $names[] = $shape->name;
+    }
+    return $names;
+}
+
+
+$shapes = array(
+    new Shape("Triangle", 20),
+    new Shape("Square", 30),
+    new Shape("Circle", 10),
+    new Shape("Rectangle", 40)
+);
+
+$sortedShapes = sortShapesByArea($shapes);
+print_r($sortedShapes);
