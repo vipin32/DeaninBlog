@@ -1,0 +1,22 @@
+deploy rails app from github to heroku
+To deploy a Rails app from GitHub to Heroku, you will need to perform the following steps:
+
+Create a new app on Heroku, and make note of the app name and URL.
+Connect your GitHub repository to the Heroku app by going to the "Deploy" tab in the Heroku app dashboard, and selecting GitHub as the deployment method.
+Configure your Rails app to work with Heroku by adding a Gemfile and a Procfile to the root of your repository. The Gemfile should include the pg gem for PostgreSQL, and the Procfile should specify the command to start the app.
+Commit and push your changes to the GitHub repository.
+Trigger a deployment from the Heroku app dashboard by selecting the branch you want to deploy and clicking the "Deploy" button.
+Once the deployment is complete, you can visit your app at the URL specified in step 1.
+Make sure your Gemfile and Procfile are correct, then run the following commands in your terminal:
+
+Copy code
+git add .
+git commit -m "Initial commit"
+git push origin master
+Then, in the Heroku website, go to your app's deploy tab and connect your github repository.
+
+Once you have connected your Github repo, you can deploy your app.
+
+Copy code
+heroku run rake db:migrate
+After that, your app will be deployed.
