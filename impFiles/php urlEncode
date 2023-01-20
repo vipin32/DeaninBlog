@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<?php
+$url =  urlencode("organization = 'Default Organization'");
+
+$url =  urlencode("organization = 'Default Organization' and");
+
+$url =  urlencode("organization = 'Default Organization' and cpu_count = 2");
+
+$url =  urlencode("organization = 'Default Organization' and location = 'Default Location'");
+
+echo str_replace('%27','"',$url).'++';
+?>
+
+</body>
+</html>
